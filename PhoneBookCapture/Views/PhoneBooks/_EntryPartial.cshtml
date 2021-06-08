@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Entry>
+
+@{
+    Layout = null;
+}
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Entries</h3>
+    </div>
+    <div class="panel-body">
+        @if (Model != null || Model.Count() < 1)
+        {
+            using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                foreach (var item in Model)
+                {
+                    <p>@item.Name:   @item.PhoneNumber</p>
+                }
+            }
+        }
+        else
+        {
+            <p>No results found</p>
+        }
+    </div>
+</div>

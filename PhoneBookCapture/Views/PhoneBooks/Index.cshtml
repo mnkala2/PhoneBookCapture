@@ -1,0 +1,102 @@
+﻿@model IEnumerable<PhoneBookCapture.Models.PhoneBook>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section scripts
+{
+    <script>
+        var ajaxCallURL = '/PhoneBooks/EntryPartial';
+
+        function getAllEMP(id) {
+            var $buttonClicked = $(this);
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: ajaxCallURL,
+                data: { id: id },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Content load failed.");
+                }
+            });
+        }
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+
+    </script>
+}
+
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+
+<form asp-controller="PhoneBooks" asp-action="Index">
+    <p>
+        Name: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+               @Html.Display("Entry")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <button onclick="getAllEMP(@(item.EntryID))" style="font-size:10pt;">Show Entries</button>
+                </td>
+                <td>
+                    <a asp-action="EditView" asp-route-id="@item.PhoneBookID">Edit</a> 
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div style="clear:both"></div>
+
+<div id='myModal' class='modal' style="text-align:left; ">
+    <div class="modal-dialog" style="width:500px; height:400px; padding:10px;">
+        <div class="modal-content" style="overflow: auto; padding:10px; background-color:#d2f5f4;">
+
+            <div style="height:10px;"></div>
+            <div id='myModalContent' style="width:500px; height:400px; padding:10px;"></div>
+            <button type="button" id="closbtn">x</button>
+        </div>
+    </div>
+</div>
+
+
+
+
